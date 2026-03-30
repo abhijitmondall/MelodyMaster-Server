@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.production
+
+# Prisma generated client
+generated/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+/generated/prisma

@@ -1,0 +1,37 @@
+{
+  "name": "melodymaster_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx tsx watch src/server.ts",
+    "build": "prisma generate && tsup src/server.ts --format esm --platform node --target node22 --outDir dist --external pg-native",
+    "start": "node dist/server.js",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:seed": "npx tsx prisma/seed.ts",
+    "stripe:webhook": "stripe listen --forward-to localhost:5000/api/v1/payment/webhook",
+    "seed:admin": "npx tsx src/dev-scripts/seedAdmin.ts",
+    "postinstall": "prisma generate",
+    "clean": "rimraf dist",
+    "lint": "eslint ./src/**/*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.1.0",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.0"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/client": "^7.6.0",
+    "dotenv": "^17.3.1",
+    "pg": "^8.20.0"
+  }
+}

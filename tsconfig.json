@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2023",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "paths": {
+      "../../generated/prisma/client.js": ["./generated/prisma/client.ts"],
+      "../generated/prisma/client.js": ["./generated/prisma/client.ts"]
+    }
+  },
+  "include": ["src/**/*", "prisma/seed.ts", "generated/prisma/client.ts"],
+  "exclude": ["node_modules", "dist"]
+}
