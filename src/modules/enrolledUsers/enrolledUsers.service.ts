@@ -15,16 +15,28 @@ const getAllEnrolledUsers = async (
   const qb = new PrismaQueryBuilder(rawQuery, SEARCH_FIELDS);
   const { where, orderBy, skip, take } = qb.build();
 
+  // Default behavior: only return successful enrollments.
+  // Pending enrollments are internal bookkeeping for Stripe checkout.
+  if (!("status" in rawQuery)) {
+    (where as Record<string, unknown>)["status"] = "Paid";
+  }
+
   const [enrolledUsers, total] = await Promise.all([
-    prisma.enrolledUser.findMany({ where, orderBy, skip, take }) as Promise<EnrolledUser[]>,
+    prisma.enrolledUser.findMany({ where, orderBy, skip, take }) as Promise<
+      EnrolledUser[]
+    >,
     prisma.enrolledUser.count({ where }),
   ]);
 
   return { enrolledUsers, total };
 };
 
-const getEnrolledUserByID = async (id: string): Promise<EnrolledUser | null> => {
-  return prisma.enrolledUser.findFirst({ where: { id } }) as Promise<EnrolledUser | null>;
+const getEnrolledUserByID = async (
+  id: string,
+): Promise<EnrolledUser | null> => {
+  return prisma.enrolledUser.findFirst({
+    where: { id },
+  }) as Promise<EnrolledUser | null>;
 };
 
 const createEnrolledUser = async (
@@ -40,7 +52,10 @@ const updateEnrolledUser = async (
   const data = Object.fromEntries(
     Object.entries(payload).filter(([, v]) => v !== undefined),
   ) as UpdateEnrolledUserInput;
-  return prisma.enrolledUser.update({ where: { id }, data }) as Promise<EnrolledUser>;
+  return prisma.enrolledUser.update({
+    where: { id },
+    data,
+  }) as Promise<EnrolledUser>;
 };
 
 const deleteEnrolledUser = async (id: string): Promise<EnrolledUser> => {

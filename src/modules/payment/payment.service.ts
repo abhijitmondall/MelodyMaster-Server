@@ -177,6 +177,43 @@ const createCheckoutSession = async (
   };
 };
 
+// ── Cancel cleanup ────────────────────────────────────────────────────────────
+/**
+ * When a user cancels from Stripe and returns to /payment/cancel, we should
+ * remove the locally-created pending enrollment so it doesn't appear as
+ * "enrolled" anywhere.
+ */
+const cancelCheckoutSession = async (
+  selectedClassId: string,
+  userEmail: string,
+): Promise<{ deleted: number }> => {
+  const selectedClass = await prisma.selectedClass.findFirst({
+    where: { id: selectedClassId },
+  });
+
+  if (!selectedClass) {
+    // Nothing to cleanup; keep this idempotent.
+    return { deleted: 0 };
+  }
+
+  if (selectedClass.userEmail !== userEmail) {
+    throw new AppError(
+      "You can only cancel checkout for your own selected classes.",
+      403,
+    );
+  }
+
+  const result = await prisma.enrolledUser.deleteMany({
+    where: {
+      email: userEmail,
+      classID: selectedClass.classID,
+      status: "Pending",
+    },
+  });
+
+  return { deleted: result.count };
+};
+
 // ── Webhook handler ───────────────────────────────────────────────────────────
 /**
  * Called by Stripe when checkout.session.completed fires.
@@ -352,6 +389,7 @@ const verifyCheckoutSession = async (sessionId: string) => {
 export const paymentService = {
   createPaymentIntent,
   createCheckoutSession,
+  cancelCheckoutSession,
   handleWebhookEvent,
   verifyCheckoutSession,
 };

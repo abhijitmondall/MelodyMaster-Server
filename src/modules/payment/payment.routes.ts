@@ -5,6 +5,7 @@ import validate from "../../middleware/validate.js";
 import {
   paymentIntentSchema,
   checkoutSessionSchema,
+  cancelCheckoutSchema,
 } from "./payment.validation.js";
 
 const router = express.Router();
@@ -36,6 +37,15 @@ router.post(
   express.json({ limit: "10kb" }),
   validate(checkoutSessionSchema),
   paymentController.createCheckoutSession,
+);
+
+// Cleanup pending enrollment when user cancels Stripe
+router.post(
+  "/cancel",
+  auth.protect,
+  express.json({ limit: "10kb" }),
+  validate(cancelCheckoutSchema),
+  paymentController.cancelCheckoutSession,
 );
 
 // Verify session after redirect from Stripe

@@ -14,5 +14,13 @@ export const checkoutSessionSchema = z.object({
     .min(1, "selectedClassId cannot be empty"),
 });
 
+// Cancel callback cleanup (delete Pending enrollment created for checkout)
+export const cancelCheckoutSchema = z.object({
+  selectedClassId: z
+    .string({ required_error: "selectedClassId is required" })
+    .min(1, "selectedClassId cannot be empty"),
+});
+
 export type PaymentIntentInput = z.infer<typeof paymentIntentSchema>;
 export type CheckoutSessionInput = z.infer<typeof checkoutSessionSchema>;
+export type CancelCheckoutInput = z.infer<typeof cancelCheckoutSchema>;
