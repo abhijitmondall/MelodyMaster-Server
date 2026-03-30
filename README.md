@@ -1,8 +1,8 @@
-# 🎵 MelodyMasters API — v3 (TypeScript)
+# 🎵 MelodyMasters API — (TypeScript)
 
 A fully modernised, modular REST API for the MelodyMasters music school platform.
 
-**Stack:** Node 22 · Express 5 · PostgreSQL · Prisma 7 · TypeScript 5 · Zod · Stripe v17 · JWT (Access + Refresh) · Helmet · bcryptjs
+**Stack:** Node · Express · PostgreSQL · Prisma · TypeScript · Zod · Stripe · JWT (Access + Refresh) · Helmet · bcryptjs
 
 ---
 
@@ -159,33 +159,35 @@ Base URL: `http://localhost:3000/api/v1`
 
 ### Health
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/health` | Public | Server health check + timestamp |
+| Method | Endpoint  | Auth   | Description                     |
+| ------ | --------- | ------ | ------------------------------- |
+| `GET`  | `/health` | Public | Server health check + timestamp |
 
 ---
 
 ### Auth `/auth`
 
 #### Token Strategy
+
 - **Access token** — short-lived (`15m` default), sent as `Authorization: Bearer <token>`
 - **Refresh token** — long-lived (`7d` default), stored in DB, sent in request body
 - **Rotation** — every `/refresh` call deletes the old token and issues a new pair
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/auth/signup` | Public | Register — returns `{ user, tokens: { accessToken, refreshToken } }` |
-| `POST` | `/auth/signin` | Public | Login — returns `{ user, tokens: { accessToken, refreshToken } }` |
-| `POST` | `/auth/refresh` | Public | Exchange refresh token → new token pair (rotation) |
-| `POST` | `/auth/signout` | Public | Revoke one refresh token |
-| `POST` | `/auth/signout-all` | 🔒 Any | Revoke all refresh tokens (sign out all devices) |
-| `GET` | `/auth/me` | 🔒 Any | Get own profile (password never returned) |
-| `PATCH` | `/auth/me` | 🔒 Any | Update own profile (name, photo, gender, phoneNumber, address) |
-| `PATCH` | `/auth/me/change-password` | 🔒 Any | Change password — revokes all refresh tokens |
-| `PATCH` | `/auth/admin/set-password/:userId` | 🔒 Admin | Force-set any user's password |
-| `GET` | `/auth/jwt/:email` | Public | Issue JWT (legacy Firebase flow) |
+| Method  | Endpoint                           | Auth     | Description                                                          |
+| ------- | ---------------------------------- | -------- | -------------------------------------------------------------------- |
+| `POST`  | `/auth/signup`                     | Public   | Register — returns `{ user, tokens: { accessToken, refreshToken } }` |
+| `POST`  | `/auth/signin`                     | Public   | Login — returns `{ user, tokens: { accessToken, refreshToken } }`    |
+| `POST`  | `/auth/refresh`                    | Public   | Exchange refresh token → new token pair (rotation)                   |
+| `POST`  | `/auth/signout`                    | Public   | Revoke one refresh token                                             |
+| `POST`  | `/auth/signout-all`                | 🔒 Any   | Revoke all refresh tokens (sign out all devices)                     |
+| `GET`   | `/auth/me`                         | 🔒 Any   | Get own profile (password never returned)                            |
+| `PATCH` | `/auth/me`                         | 🔒 Any   | Update own profile (name, photo, gender, phoneNumber, address)       |
+| `PATCH` | `/auth/me/change-password`         | 🔒 Any   | Change password — revokes all refresh tokens                         |
+| `PATCH` | `/auth/admin/set-password/:userId` | 🔒 Admin | Force-set any user's password                                        |
+| `GET`   | `/auth/jwt/:email`                 | Public   | Issue JWT (legacy Firebase flow)                                     |
 
 **Signup body:**
+
 ```json
 {
   "name": "Avi",
@@ -196,16 +198,19 @@ Base URL: `http://localhost:3000/api/v1`
 ```
 
 **Signin body:**
+
 ```json
 { "email": "avi@example.com", "password": "secret123" }
 ```
 
 **Refresh body:**
+
 ```json
 { "refreshToken": "<your-refresh-token>" }
 ```
 
 **Change password body:**
+
 ```json
 {
   "currentPassword": "oldpass",
@@ -218,63 +223,64 @@ Base URL: `http://localhost:3000/api/v1`
 
 ### Users `/users`
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/users/instructors` | Public | Top instructors sorted by student count |
-| `POST` | `/users` | Public | Create/upsert user (Firebase auth flow) |
-| `GET` | `/users` | 🔒 Any | List all users (filterable, paginated) |
-| `GET` | `/users/:id` | 🔒 Any | Get user by ID |
-| `PATCH` | `/users/:id` | 🔒 Any | Update user |
-| `PATCH` | `/users/email/:email` | 🔒 Any | Update instructor class/student counts |
-| `DELETE` | `/users/:id` | 🔒 Admin | Delete user |
+| Method   | Endpoint              | Auth     | Description                             |
+| -------- | --------------------- | -------- | --------------------------------------- |
+| `GET`    | `/users/instructors`  | Public   | Top instructors sorted by student count |
+| `POST`   | `/users`              | Public   | Create/upsert user (Firebase auth flow) |
+| `GET`    | `/users`              | 🔒 Any   | List all users (filterable, paginated)  |
+| `GET`    | `/users/:id`          | 🔒 Any   | Get user by ID                          |
+| `PATCH`  | `/users/:id`          | 🔒 Any   | Update user                             |
+| `PATCH`  | `/users/email/:email` | 🔒 Any   | Update instructor class/student counts  |
+| `DELETE` | `/users/:id`          | 🔒 Admin | Delete user                             |
 
 ---
 
 ### Classes `/classes`
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/classes` | Public | List all classes — includes computed `availableSeats` |
-| `GET` | `/classes/:id` | Public | Get class by ID |
-| `POST` | `/classes` | 🔒 Instructor/Admin | Create class |
-| `PATCH` | `/classes/:id` | 🔒 Instructor/Admin | Update class |
-| `DELETE` | `/classes/:id` | 🔒 Admin | Delete class |
+| Method   | Endpoint       | Auth                | Description                                           |
+| -------- | -------------- | ------------------- | ----------------------------------------------------- |
+| `GET`    | `/classes`     | Public              | List all classes — includes computed `availableSeats` |
+| `GET`    | `/classes/:id` | Public              | Get class by ID                                       |
+| `POST`   | `/classes`     | 🔒 Instructor/Admin | Create class                                          |
+| `PATCH`  | `/classes/:id` | 🔒 Instructor/Admin | Update class                                          |
+| `DELETE` | `/classes/:id` | 🔒 Admin            | Delete class                                          |
 
 ---
 
 ### Selected Classes `/selectedClasses`
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/selectedClasses` | 🔒 Any | List selected classes |
-| `GET` | `/selectedClasses/:id` | 🔒 Any | Get selected class |
-| `POST` | `/selectedClasses` | 🔒 Any | Select a class |
-| `PATCH` | `/selectedClasses/:id` | 🔒 Any | Update selection |
-| `DELETE` | `/selectedClasses/:id` | 🔒 Any | Remove selection |
+| Method   | Endpoint               | Auth   | Description           |
+| -------- | ---------------------- | ------ | --------------------- |
+| `GET`    | `/selectedClasses`     | 🔒 Any | List selected classes |
+| `GET`    | `/selectedClasses/:id` | 🔒 Any | Get selected class    |
+| `POST`   | `/selectedClasses`     | 🔒 Any | Select a class        |
+| `PATCH`  | `/selectedClasses/:id` | 🔒 Any | Update selection      |
+| `DELETE` | `/selectedClasses/:id` | 🔒 Any | Remove selection      |
 
 ---
 
 ### Enrolled Users `/enrolledUsers`
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/enrolledUsers` | 🔒 Any | List enrolled users |
-| `GET` | `/enrolledUsers/:id` | 🔒 Any | Get enrolled user |
-| `POST` | `/enrolledUsers` | 🔒 Any | Create enrollment record |
-| `PATCH` | `/enrolledUsers/:id` | 🔒 Any | Update enrollment |
-| `DELETE` | `/enrolledUsers/:id` | 🔒 Admin | Delete enrollment |
+| Method   | Endpoint             | Auth     | Description              |
+| -------- | -------------------- | -------- | ------------------------ |
+| `GET`    | `/enrolledUsers`     | 🔒 Any   | List enrolled users      |
+| `GET`    | `/enrolledUsers/:id` | 🔒 Any   | Get enrolled user        |
+| `POST`   | `/enrolledUsers`     | 🔒 Any   | Create enrollment record |
+| `PATCH`  | `/enrolledUsers/:id` | 🔒 Any   | Update enrollment        |
+| `DELETE` | `/enrolledUsers/:id` | 🔒 Admin | Delete enrollment        |
 
 ---
 
 ### Payment `/payment`
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
+| Method | Endpoint                         | Auth   | Description                                           |
+| ------ | -------------------------------- | ------ | ----------------------------------------------------- |
 | `POST` | `/payment/create-payment-intent` | 🔒 Any | Create Stripe Payment Intent — returns `clientSecret` |
 
 **Body:**
+
 ```json
-{ "price": 25.00 }
+{ "price": 25.0 }
 ```
 
 ---
@@ -283,32 +289,32 @@ Base URL: `http://localhost:3000/api/v1`
 
 All list endpoints support:
 
-| Param | Example | Description |
-|---|---|---|
-| `search` | `?search=yoga` | Case-insensitive OR search across key string fields |
-| `sort` | `?sort=-price,className` | Sort by field — prefix `-` for descending |
-| `fields` | `?fields=className,price` | Return only selected fields |
-| `page` | `?page=2` | Page number (default: 1) |
-| `limit` | `?limit=20` | Results per page (default: 100, max: 500) |
-| `status` | `?status=Approved` | Exact filter on any field |
-| `price[gte]` | `?price[gte]=10` | Range operators: `gte`, `gt`, `lte`, `lt` |
+| Param        | Example                   | Description                                         |
+| ------------ | ------------------------- | --------------------------------------------------- |
+| `search`     | `?search=yoga`            | Case-insensitive OR search across key string fields |
+| `sort`       | `?sort=-price,className`  | Sort by field — prefix `-` for descending           |
+| `fields`     | `?fields=className,price` | Return only selected fields                         |
+| `page`       | `?page=2`                 | Page number (default: 1)                            |
+| `limit`      | `?limit=20`               | Results per page (default: 100, max: 500)           |
+| `status`     | `?status=Approved`        | Exact filter on any field                           |
+| `price[gte]` | `?price[gte]=10`          | Range operators: `gte`, `gt`, `lte`, `lt`           |
 
 ---
 
 ## npm Scripts
 
-| Script | Description |
-|---|---|
-| `npm run dev` | Start dev server with hot reload via `tsx watch` |
-| `npm run build` | `prisma generate` + compile to `dist/` via `tsup` |
-| `npm start` | Run compiled production build from `dist/` |
-| `npm run db:generate` | Generate typed Prisma client into `generated/prisma/` |
-| `npm run db:push` | Push schema to DB — dev only, no migration files |
-| `npm run db:migrate` | Run Prisma migrations — production |
-| `npm run db:studio` | Open Prisma Studio GUI at `localhost:5555` |
-| `npm run db:seed` | Seed classes, instructors (with hashed passwords), admin |
-| `npm run seed:admin` | Create a single admin user |
-| `npm run clean` | Remove `dist/` directory |
+| Script                | Description                                              |
+| --------------------- | -------------------------------------------------------- |
+| `npm run dev`         | Start dev server with hot reload via `tsx watch`         |
+| `npm run build`       | `prisma generate` + compile to `dist/` via `tsup`        |
+| `npm start`           | Run compiled production build from `dist/`               |
+| `npm run db:generate` | Generate typed Prisma client into `generated/prisma/`    |
+| `npm run db:push`     | Push schema to DB — dev only, no migration files         |
+| `npm run db:migrate`  | Run Prisma migrations — production                       |
+| `npm run db:studio`   | Open Prisma Studio GUI at `localhost:5555`               |
+| `npm run db:seed`     | Seed classes, instructors (with hashed passwords), admin |
+| `npm run seed:admin`  | Create a single admin user                               |
+| `npm run clean`       | Remove `dist/` directory                                 |
 
 ---
 
@@ -345,15 +351,15 @@ All errors return a consistent JSON shape:
 
 In development (`NODE_ENV=development`), responses also include `stack` and `error` fields.
 
-| Code | Meaning |
-|---|---|
-| 400 | Bad request / validation failure |
-| 401 | Unauthenticated — invalid or expired token |
-| 403 | Forbidden — insufficient role |
-| 404 | Record not found |
-| 409 | Conflict — duplicate email/unique constraint |
-| 502 | Upstream service error (e.g. Stripe) |
-| 500 | Unexpected server error |
+| Code | Meaning                                      |
+| ---- | -------------------------------------------- |
+| 400  | Bad request / validation failure             |
+| 401  | Unauthenticated — invalid or expired token   |
+| 403  | Forbidden — insufficient role                |
+| 404  | Record not found                             |
+| 409  | Conflict — duplicate email/unique constraint |
+| 502  | Upstream service error (e.g. Stripe)         |
+| 500  | Unexpected server error                      |
 
 ---
 
