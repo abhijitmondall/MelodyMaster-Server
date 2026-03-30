@@ -1,8 +1,11 @@
 {
   "name": "melodymaster_server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "author": "MelodyMasters",
+  "license": "ISC",
+  "type": "module",
+  "description": "MelodyMasters REST API — Node · Express  · PostgreSQL · Prisma  · TypeScript",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "npx tsx watch src/server.ts",
     "build": "prisma generate && tsup src/server.ts --format esm --platform node --target node22 --outDir dist --external pg-native",
@@ -19,19 +22,39 @@
     "lint": "eslint ./src/**/*"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^25.5.0",
     "eslint": "^10.1.0",
+    "prisma": "^7.6.0",
+    "rimraf": "^6.1.3",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.0"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
     "dotenv": "^17.3.1",
-    "pg": "^8.20.0"
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.1",
+    "pg": "^8.20.0",
+    "stripe": "^21.0.1",
+    "zod": "^4.3.6"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
   }
 }
