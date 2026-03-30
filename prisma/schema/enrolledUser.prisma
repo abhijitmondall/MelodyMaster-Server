@@ -1,0 +1,19 @@
+model EnrolledUser {
+  id               String   @id @default(uuid())
+  userName         String?
+  email            String
+  classID          String
+  transactionId    String
+  classImage       String?
+  className        String
+  price            Float
+  enrolledStudents Int?
+  status           String   @default("Paid")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([email])
+  @@index([classID])
+  @@index([className])
+  @@map("enrolled_users")
+}

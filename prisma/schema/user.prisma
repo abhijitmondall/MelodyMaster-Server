@@ -1,0 +1,21 @@
+model User {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String?
+  photo       String?
+  gender      String?
+  phoneNumber String?
+  address     String?
+  role        Role     @default(Student)
+  classes     Int      @default(0)
+  students    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  refreshTokens RefreshToken[]
+
+  @@index([email])
+  @@map("users")
+}

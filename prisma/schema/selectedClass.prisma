@@ -1,0 +1,18 @@
+model SelectedClass {
+  id               String              @id @default(uuid())
+  userEmail        String
+  instructorEmail  String
+  classID          String
+  classImage       String?
+  className        String
+  price            Float
+  status           SelectedClassStatus @default(Selected)
+  enrolledStudents Int?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@index([userEmail])
+  @@index([classID])
+  @@index([className])
+  @@map("selected_classes")
+}

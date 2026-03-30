@@ -1,0 +1,22 @@
+model Class {
+  id               String      @id @default(uuid())
+  classImage       String?
+  className        String
+  description      String?
+  instructorName   String?
+  instructorEmail  String?
+  instructorPhoto  String?
+  totalSeats       Int         @default(0)
+  enrolledStudents Int         @default(0)
+  price            Float
+  ratings          Float       @default(4.5)
+  status           ClassStatus @default(Pending)
+  feedback         String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  @@index([className])
+  @@index([status])
+  @@index([instructorEmail])
+  @@map("classes")
+}

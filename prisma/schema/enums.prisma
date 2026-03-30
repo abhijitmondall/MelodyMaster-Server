@@ -1,0 +1,16 @@
+enum Role {
+  Student
+  Instructor
+  Admin
+}
+
+enum ClassStatus {
+  Pending
+  Approved
+  Denied
+}
+
+enum SelectedClassStatus {
+  Selected
+  Enrolled
+}
